@@ -132,9 +132,9 @@ ${formData.callstack ? '\n\nCallstack:\n' + formData.callstack : ''}
     toast.success('Jira fields copied!');
   };
 
-  const copyJiraComment = () => {
+  const buildJiraComment = () => {
     const gameMode = formData.labels?.gameMode || 'Game';
-    const comment = `New instance of ${data.summary.toLowerCase()} in ${gameMode} during [Event/Playtest]
+    return `New instance of ${data.summary.toLowerCase()} in ${gameMode} during [Event/Playtest]
 
 PLATFORMS
 
@@ -159,7 +159,10 @@ EXPECTED RESULT
 
 REPRO RATE: ${formData.reproductionCount}
     `.trim();
+  };
 
+  const copyJiraComment = () => {
+    const comment = buildJiraComment();
     navigator.clipboard.writeText(comment);
     toast.success('Jira comment copied!');
   };
@@ -241,6 +244,13 @@ REPRO RATE: ${formData.reproductionCount}
           content={data.description}
           onCopy={() => copyField('Description', data.description)}
           copied={copied.description}
+        />
+
+        <FieldCard
+          title="💬 Jira Comment (for updating existing tickets)"
+          content={buildJiraComment()}
+          onCopy={() => copyField('Jira Comment', buildJiraComment())}
+          copied={copied['Jira Comment']}
         />
       </div>
 
