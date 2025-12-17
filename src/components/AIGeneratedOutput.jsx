@@ -141,9 +141,27 @@ ${formData.callstack ? '\n\nCallstack:\n' + formData.callstack : ''}
       ? `New instance of crash in ${gameMode} during [Event/Playtest]`
       : `Issue reproduced${gameMode ? ` in ${gameMode}` : ''} during [Event/Playtest]`;
 
-    // Extract actual and expected results from description
-    const descLines = data.description.split('\n').filter(line => line.trim());
-    const actualResult = descLines[0] || 'Issue occurred';
+    // Parse description to extract ACTUAL and EXPECTED results
+    const descLines = data.description.split('\n');
+    let actualResult = '';
+    let expectedResult = '';
+
+    for (let i = 0; i < descLines.length; i++) {
+      const line = descLines[i].trim();
+      if (line.startsWith('ACTUAL RESULT:')) {
+        actualResult = line.replace('ACTUAL RESULT:', '').trim();
+      } else if (line.startsWith('EXPECTED RESULT:')) {
+        expectedResult = line.replace('EXPECTED RESULT:', '').trim();
+      }
+    }
+
+    // Fallback if not found in description
+    if (!actualResult) {
+      actualResult = descLines.filter(line => line.trim())[0] || 'Issue occurred';
+    }
+    if (!expectedResult) {
+      expectedResult = '[Expected behavior - the issue should not occur]';
+    }
 
     return `${introLine}
 
@@ -165,7 +183,7 @@ ${actualResult}
 
 EXPECTED RESULT
 
-[Expected behavior - the issue should not occur]
+${expectedResult}
 
 REPRO RATE: ${formData.reproductionCount}
     `.trim();
