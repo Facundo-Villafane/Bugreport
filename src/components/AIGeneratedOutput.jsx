@@ -163,6 +163,24 @@ ${formData.callstack ? '\n\nCallstack:\n' + formData.callstack : ''}
       expectedResult = '[Expected behavior - the issue should not occur]';
     }
 
+    // Parse command line for Build ID and Backend
+    let buildId = '[Build ID]';
+    let backend = '[Backend Name]';
+
+    if (formData.commandLine) {
+      // Extract Build ID from -buildidoverride= (case insensitive)
+      const buildIdMatch = formData.commandLine.match(/-buildidoverride=(\d+)/i);
+      if (buildIdMatch) {
+        buildId = buildIdMatch[1];
+      }
+
+      // Extract Backend from -epicapp=
+      const backendMatch = formData.commandLine.match(/-epicapp=(\w+)/i);
+      if (backendMatch) {
+        backend = backendMatch[1];
+      }
+    }
+
     return `${introLine}
 
 PLATFORMS
@@ -170,7 +188,7 @@ PLATFORMS
 ${formData.platforms?.join(', ') || 'N/A'}
 ${formData.deviceSpecs ? '\n' + formData.deviceSpecs : ''}
 
-Version: ${formData.branchFoundIn || '[Version]'} > CL: ${formData.foundCL || '[CL]'} > ID: [Build ID] -> Backend: [Backend Name]
+Version: ${formData.branchFoundIn || '[Version]'} > CL: ${formData.foundCL || '[CL]'} > ID: ${buildId} -> Backend: ${backend}
 
 ${formData.commandLine ? `Command line: ${formData.commandLine}\n` : ''}
 REPRO STEPS
