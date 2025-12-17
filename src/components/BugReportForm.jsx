@@ -9,8 +9,10 @@ import {
   HOW_FOUND_OPTIONS,
   EXPERIENCES_IMPACTED,
   TEST_TEAMS,
-  DEVICE_SPECS_PRESETS
+  DEVICE_SPECS_PRESETS,
+  LABEL_CATEGORIES
 } from '../constants/jiraFields';
+import LabelSelector from './FormFields/LabelSelector';
 
 const BugReportForm = ({ onChange }) => {
   const [formData, setFormData] = useState({
@@ -26,6 +28,12 @@ const BugReportForm = ({ onChange }) => {
     affectsVersions: '',
     deviceSpecs: '',
     customDeviceSpecs: '',
+    labels: {
+      primary: '',
+      secondary: '',
+      gameMode: '',
+      llmEnabled: false
+    },
 
     // Repro rates by platform
     reproRates: {
@@ -158,7 +166,18 @@ const BugReportForm = ({ onChange }) => {
         </div>
       </div>
 
-      {/* Section 2: Reproduction Rate by Platform */}
+      {/* Section 2: Labels */}
+      <div className="mb-8">
+        <h2 className="retro-section-header text-xl uppercase">LABELS</h2>
+
+        <LabelSelector
+          value={formData.labels}
+          onChange={handleChange}
+          labelCategories={LABEL_CATEGORIES}
+        />
+      </div>
+
+      {/* Section 3: Reproduction Rate by Platform */}
       <div className="mb-8">
         <h2 className="retro-section-header text-xl uppercase">REPRODUCTION RATE</h2>
 

@@ -23,15 +23,34 @@ export const HOW_FOUND_OPTIONS = [
 ];
 
 export const EXPERIENCES_IMPACTED = [
+  'BabyCorgi',
   'Battle Royale',
-  'Sparks',
-  'Juno',
-  'Rocket Racing',
-  'LEGO Fortnite',
-  'Festival',
+  'Beanstalk',
+  'Blitz',
+  'BR',
+  'Classic (Figment)',
+  'Coronado',
   'Creative',
+  'DelMar',
+  'Delulu',
+  'Feral',
+  'Festival',
+  'Frontend',
+  'Imperial',
+  'Juno',
+  'LEGO Fortnite',
+  'LFN - Juno',
+  'LFN - LTEs',
+  'LFN - Sprout',
+  'Lobby/Frontend',
+  'Pimlico',
+  'Ranked',
+  'Reload',
+  'Rocket Racing',
   'Save the World',
-  'Lobby/Frontend'
+  'Sparks',
+  'StW',
+  'UEFN'
 ];
 
 export const TEST_TEAMS = [
@@ -40,6 +59,30 @@ export const TEST_TEAMS = [
   'Epic Internal',
   'Community'
 ];
+
+export const LABEL_CATEGORIES = {
+  // Primary labels (required - first label)
+  PRIMARY: ['EPAM-F', 'EPAM-X'],
+
+  // Secondary labels (optional - second label)
+  SECONDARY: ['PerfMem'],
+
+  // Game mode labels (optional - third label)
+  GAME_MODES: [
+    'Squads',
+    'Figment',
+    'Reload',
+    'Blitz',
+    'StrideMice',
+    'Juno',
+    'Sparks',
+    'Sprout',
+    'FriedRice'
+  ],
+
+  // Feature flags (optional)
+  FEATURES: ['LLM-Enabled']
+};
 
 export const BUG_TAGS = [
   { value: 'NCL', label: '[NCL] Network Connection Lost' },

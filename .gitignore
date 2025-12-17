@@ -27,3 +27,11 @@ dist-ssr
 .env
 .env.local
 .env.production
+
+# Electron build output
+release/
+out/
+dist-electron/
+
+# Electron cache
+.electron-cache/

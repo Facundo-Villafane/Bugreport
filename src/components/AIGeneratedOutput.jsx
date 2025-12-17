@@ -25,6 +25,16 @@ const FieldCard = ({ title, content, onCopy, copied }) => {
 const AIGeneratedOutput = ({ data, formData, onReset }) => {
   const [copied, setCopied] = useState({});
 
+  // Build labels array from formData
+  const buildLabels = () => {
+    const labels = [];
+    if (formData.labels?.primary) labels.push(formData.labels.primary);
+    if (formData.labels?.secondary) labels.push(formData.labels.secondary);
+    if (formData.labels?.gameMode) labels.push(formData.labels.gameMode);
+    if (formData.labels?.llmEnabled) labels.push('LLM-Enabled');
+    return labels;
+  };
+
   const copyField = (fieldName, content) => {
     navigator.clipboard.writeText(content);
     setCopied({ ...copied, [fieldName]: true });
@@ -36,6 +46,7 @@ const AIGeneratedOutput = ({ data, formData, onReset }) => {
   };
 
   const copyAllJiraFormat = () => {
+    const labels = buildLabels();
     const jiraFormatted = `
 ========================================
 JIRA BUG REPORT
@@ -50,6 +61,7 @@ PLATFORMS TESTED: ${formData.platformsTested?.join(', ') || 'N/A'}
 PLATFORMS: ${formData.platforms?.join(', ') || 'N/A'}
 HOW FOUND: ${formData.howFound}
 EXPERIENCES IMPACTED: ${formData.experiencesImpacted?.join(', ')}
+LABELS: ${labels.join(', ') || 'N/A'}
 
 SEVERITY: ${data.severity} - ${SEVERITY_LEVELS[data.severity]}
 REPRODUCTION RATE: ${formData.reproductionCount}
@@ -93,6 +105,7 @@ Generated with Bug Report Formatter
   };
 
   const copyJiraFieldsOnly = () => {
+    const labels = buildLabels();
     const jiraFields = `
 Summary: ${data.summary}
 Severity: ${data.severity}
@@ -100,6 +113,7 @@ Component/s: ${data.component}
 Platforms: ${formData.platforms?.join(', ')}
 Platforms Tested: ${formData.platformsTested?.join(', ')}
 Experiences Impacted: ${formData.experiencesImpacted?.join(', ')}
+Labels: ${labels.join(', ') || 'N/A'}
 How Found: ${formData.howFound}
 Reproduction Rate: ${formData.reproductionCount}
 Branch Found In: ${formData.branchFoundIn || 'N/A'}
@@ -219,6 +233,12 @@ ${formData.callstack ? '\n\nCallstack:\n' + formData.callstack : ''}
             <span className="font-bold" style={{color: 'var(--retro-border)'}}>Reproduction Rate:</span>{' '}
             <span style={{color: 'var(--retro-text)'}}>{formData.reproductionCount}</span>
           </div>
+          {buildLabels().length > 0 && (
+            <div className="col-span-2">
+              <span className="font-bold" style={{color: 'var(--retro-border)'}}>Labels:</span>{' '}
+              <span style={{color: 'var(--retro-text)'}}>{buildLabels().join(', ')}</span>
+            </div>
+          )}
           {formData.branchFoundIn && (
             <div>
               <span className="font-bold" style={{color: 'var(--retro-border)'}}>Branch:</span>{' '}
