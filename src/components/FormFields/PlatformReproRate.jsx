@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 const PlatformReproRate = ({ platforms, reproRates, onChange, error }) => {
   const allPlatforms = ['PS4', 'PS5', 'XB1', 'XSX', 'Switch', 'PC', 'Android', 'iOS', 'iPAD', 'Switch 2'];
   const [activeTab, setActiveTab] = useState('BR');
+  const [bulkInput, setBulkInput] = useState('');
+  const [showBulkInput, setShowBulkInput] = useState(false);
 
   const MODE_PRESETS = {
     'BR': {
@@ -74,6 +76,35 @@ const PlatformReproRate = ({ platforms, reproRates, onChange, error }) => {
     onChange({ target: { name: 'reproRates', value: newReproRates } });
   };
 
+  const handleBulkPaste = () => {
+    if (!bulkInput.trim()) return;
+
+    const lines = bulkInput.trim().split('\n');
+    const newReproRates = { ...reproRates };
+
+    lines.forEach(line => {
+      // Match platform name and number with flexible whitespace
+      const match = line.trim().match(/^(\w+(?:\s+\d+)?)\s+(\d+)$/);
+      if (match) {
+        let [_, platform, value] = match;
+        platform = platform.trim();
+
+        // Map "Sage" to "Switch 2"
+        const mappedPlatform = platform === 'Sage' ? 'Switch 2' : platform;
+
+        if (allPlatforms.includes(mappedPlatform)) {
+          newReproRates[mappedPlatform] = {
+            occurred: newReproRates[mappedPlatform]?.occurred || '',
+            total: value
+          };
+        }
+      }
+    });
+
+    onChange({ target: { name: 'reproRates', value: newReproRates } });
+    setBulkInput('');
+  };
+
   return (
     <div className="mb-4">
       <label className="block text-sm font-bold mb-2" style={{color: 'var(--retro-border)'}}>
@@ -101,6 +132,58 @@ const PlatformReproRate = ({ platforms, reproRates, onChange, error }) => {
             {mode}
           </button>
         ))}
+      </div>
+
+      {/* Bulk Paste Section */}
+      <div className="mb-3">
+        <button
+          type="button"
+          onClick={() => setShowBulkInput(!showBulkInput)}
+          className="px-3 py-2 text-xs font-bold uppercase"
+          style={{
+            backgroundColor: 'var(--retro-accent)',
+            color: 'var(--retro-border)',
+            border: '2px solid var(--retro-border)'
+          }}
+        >
+          {showBulkInput ? '− HIDE BULK PASTE' : '+ BULK PASTE'}
+        </button>
+
+        {showBulkInput && (
+          <div className="mt-3 p-3" style={{border: '2px solid var(--retro-border)', backgroundColor: 'var(--retro-card-bg)'}}>
+            <p className="text-xs font-mono mb-2" style={{color: 'var(--retro-text)'}}>
+              Paste platform data (one per line). Example:<br/>
+              PS4 10<br/>
+              PS5 6<br/>
+              Sage 4
+            </p>
+            <textarea
+              value={bulkInput}
+              onChange={(e) => setBulkInput(e.target.value)}
+              placeholder="PS4    10&#10;PS5    6&#10;XB1    10&#10;..."
+              rows={5}
+              className="w-full px-3 py-2 text-sm font-mono mb-2"
+              style={{
+                border: '2px solid var(--retro-border)',
+                backgroundColor: 'var(--retro-card-bg)',
+                color: 'var(--retro-text)',
+                resize: 'vertical'
+              }}
+            />
+            <button
+              type="button"
+              onClick={handleBulkPaste}
+              className="px-4 py-2 text-sm font-bold uppercase w-full"
+              style={{
+                backgroundColor: 'var(--retro-primary)',
+                color: 'var(--retro-header-text)',
+                border: '2px solid var(--retro-border)'
+              }}
+            >
+              APPLY BULK DATA
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="p-4" style={{border: '3px solid var(--retro-border)', backgroundColor: 'var(--retro-accent)'}}>
