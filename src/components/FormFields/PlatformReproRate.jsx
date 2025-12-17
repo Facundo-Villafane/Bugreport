@@ -1,7 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const PlatformReproRate = ({ platforms, reproRates, onChange, error }) => {
   const allPlatforms = ['PS4', 'PS5', 'XB1', 'XSX', 'Switch', 'PC', 'Android', 'iOS', 'iPAD', 'Switch 2'];
+  const [activeTab, setActiveTab] = useState('BR');
+
+  const MODE_PRESETS = {
+    'BR': {
+      'PS4': 10,
+      'PS5': 6,
+      'XB1': 10,
+      'XSX': 11,
+      'Switch': 14,
+      'PC': 18,
+      'Android': 8,
+      'iOS': 10,
+      'iPAD': 4,
+      'Switch 2': 4 // Sage
+    },
+    'JUNO': {
+      'PS4': 9,
+      'PS5': 1,
+      'XB1': 7,
+      'XSX': 5,
+      'Switch': 5,
+      'PC': 4,
+      'Android': 2,
+      'iOS': 3,
+      'iPAD': 0,
+      'Switch 2': 0
+    },
+    'SPARKS': {
+      'PS4': 7,
+      'PS5': 3,
+      'XB1': 2,
+      'XSX': 4,
+      'Switch': 8,
+      'PC': 2,
+      'Android': 3,
+      'iOS': 3,
+      'iPAD': 0,
+      'Switch 2': 0
+    }
+  };
+
+  const handleTabChange = (mode) => {
+    setActiveTab(mode);
+    const preset = MODE_PRESETS[mode];
+
+    // Fill the "total" field for each platform with preset values
+    const newReproRates = {};
+    allPlatforms.forEach(platform => {
+      newReproRates[platform] = {
+        occurred: reproRates[platform]?.occurred || '',
+        total: preset[platform]?.toString() || ''
+      };
+    });
+
+    onChange({ target: { name: 'reproRates', value: newReproRates } });
+  };
 
   const handleReproChange = (platform, field, value) => {
     // Only allow numbers
@@ -24,9 +80,28 @@ const PlatformReproRate = ({ platforms, reproRates, onChange, error }) => {
         Reproduction Rate by Platform <span style={{color: 'var(--retro-primary)'}}>*</span>
       </label>
       <p className="text-xs font-mono mb-3" style={{color: 'var(--retro-text)'}}>
-        Enter how many times the bug occurred vs total attempts for each platform.
-        Leave 00/00 for platforms not tested.
+        Select a game mode to auto-fill device tested values. You can still edit them manually.
       </p>
+
+      {/* Mode Tabs */}
+      <div className="flex gap-2 mb-3">
+        {['BR', 'JUNO', 'SPARKS'].map((mode) => (
+          <button
+            key={mode}
+            type="button"
+            onClick={() => handleTabChange(mode)}
+            className="px-4 py-2 text-sm font-bold uppercase"
+            style={{
+              backgroundColor: activeTab === mode ? 'var(--retro-primary)' : 'var(--retro-secondary)',
+              color: activeTab === mode ? 'var(--retro-header-text)' : 'var(--retro-text)',
+              border: '3px solid var(--retro-border)',
+              boxShadow: activeTab === mode ? 'var(--retro-shadow)' : 'none'
+            }}
+          >
+            {mode}
+          </button>
+        ))}
+      </div>
 
       <div className="p-4" style={{border: '3px solid var(--retro-border)', backgroundColor: 'var(--retro-accent)'}}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">

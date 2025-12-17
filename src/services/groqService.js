@@ -50,6 +50,8 @@ export const groqService = {
   async generateSummary(formData) {
     const systemMessage = `You are an expert QA specialist for Fortnite. Generate a clear, concise Summary for a Jira bug report.
 
+CRITICAL: ALL OUTPUT MUST BE IN ENGLISH. Even if the input is in Spanish or another language, your response MUST be in English.
+
 SUMMARY STRUCTURE:
 Create a logical title following this formula:
 "What happened?" while "Doing what action?" in "Which context?"
@@ -115,6 +117,8 @@ Generate the Summary:`;
   async generateSeverity(formData) {
     const systemMessage = `You are an expert QA specialist. Analyze bugs and determine severity level.
 
+CRITICAL: ALL OUTPUT MUST BE IN ENGLISH. Even if the input is in Spanish or another language, your response MUST be in English.
+
 SEVERITY LEVELS:
 1 = Game Breaker: Prevents playing completely (crashes, UI locks, repeated disconnections)
 2 = Major Function: Big impact but playable (weapons not working, incorrect damage)
@@ -140,6 +144,8 @@ What is the severity level?`;
    */
   async generateSteps(formData) {
     const systemMessage = `You are an expert QA specialist for Fortnite. Generate CONCISE Steps to Reproduce.
+
+CRITICAL: ALL OUTPUT MUST BE IN ENGLISH. Even if the input is in Spanish or another language, your response MUST be in English.
 
 CRITICAL RULES - DO NOT INVENT INFORMATION:
 1. ONLY use information explicitly provided by the user
@@ -218,6 +224,8 @@ Generate CONCISE Steps to Reproduce using ONLY the information above:`;
   async generateDescription(formData) {
     const systemMessage = `You are an expert QA specialist. Generate the Description section for a Jira bug report with ALL these mandatory sections:
 
+CRITICAL: ALL OUTPUT MUST BE IN ENGLISH. Even if the input is in Spanish or another language, your response MUST be in English.
+
 REQUIRED SECTIONS:
 1. REPRO RATE PLATFORMS: (EXACT format below - use the data provided, fill with 00/00 for platforms not tested)
 2. WORKAROUND: (if any, otherwise "None Known")
@@ -279,6 +287,8 @@ Generate the Description section with all mandatory sections using the exact rep
    */
   async suggestComponent(formData) {
     const systemMessage = `You are an expert at categorizing Fortnite bugs. Suggest the most appropriate Jira component.
+
+CRITICAL: ALL OUTPUT MUST BE IN ENGLISH. Even if the input is in Spanish or another language, your response MUST be in English.
 
 MAIN CATEGORIES:
 - BR - Animation - [Cosmetics/Character/Weapon/Vehicle]
