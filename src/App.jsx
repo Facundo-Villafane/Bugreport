@@ -62,15 +62,15 @@ function App() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Column - Form */}
-          <div className="lg:sticky lg:top-8 lg:self-start">
+          <div>
             <BugReportForm
               onChange={handleFormChange}
               formData={formData}
             />
           </div>
 
-          {/* Right Column - Live Preview */}
-          <div>
+          {/* Right Column - Live Preview (Sticky) */}
+          <div className="lg:sticky lg:top-8 lg:self-start" style={{maxHeight: 'calc(100vh - 4rem)', overflowY: 'auto'}}>
             {error && (
               <div className="mb-4 p-4 retro-card" style={{backgroundColor: '#ffebee'}}>
                 <div className="flex items-center">
