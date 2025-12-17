@@ -12,7 +12,7 @@ import {
   DEVICE_SPECS_PRESETS
 } from '../constants/jiraFields';
 
-const BugReportForm = ({ onSubmit, isLoading }) => {
+const BugReportForm = ({ onChange }) => {
   const [formData, setFormData] = useState({
     // Manual fields
     project: 'FORT',
@@ -51,12 +51,45 @@ const BugReportForm = ({ onSubmit, isLoading }) => {
 
   const [errors, setErrors] = useState({});
 
+  const updateParent = (data) => {
+    // Calculate platforms where bug occurs (where occurred > 0)
+    const platformsWithBug = Object.entries(data.reproRates || {})
+      .filter(([_, rate]) => parseInt(rate.occurred) > 0)
+      .map(([platform]) => platform);
+
+    // Calculate platforms tested (where total > 0)
+    const platformsTested = Object.entries(data.reproRates || {})
+      .filter(([_, rate]) => parseInt(rate.total) > 0)
+      .map(([platform]) => platform);
+
+    // Calculate total repro count
+    const totalOccurred = Object.values(data.reproRates || {})
+      .reduce((sum, rate) => sum + (parseInt(rate.occurred) || 0), 0);
+    const totalAttempts = Object.values(data.reproRates || {})
+      .reduce((sum, rate) => sum + (parseInt(rate.total) || 0), 0);
+
+    // Merge device specs if custom is selected
+    const finalFormData = {
+      ...data,
+      platforms: platformsWithBug,
+      platformsTested: platformsTested,
+      reproductionCount: `${totalOccurred}/${totalAttempts}`,
+      deviceSpecs: data.deviceSpecs === 'Custom'
+        ? data.customDeviceSpecs
+        : DEVICE_SPECS_PRESETS[data.deviceSpecs] || data.deviceSpecs
+    };
+
+    onChange(finalFormData);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
+    const newFormData = {
+      ...formData,
       [name]: value
-    }));
+    };
+    setFormData(newFormData);
+    updateParent(newFormData);
 
     // Clear error when user starts typing
     if (errors[name]) {
@@ -67,114 +100,8 @@ const BugReportForm = ({ onSubmit, isLoading }) => {
     }
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    // Required fields validation
-    if (!formData.bugDescription || formData.bugDescription.length < 20) {
-      newErrors.bugDescription = 'Please describe the bug in detail (minimum 20 characters)';
-    }
-
-    if (!formData.whatWasDoing) {
-      newErrors.whatWasDoing = 'Please describe what you were doing when the bug occurred';
-    }
-
-    if (!formData.whereHappened) {
-      newErrors.whereHappened = 'Please specify where the bug occurred';
-    }
-
-    // Check if at least one platform has repro data
-    const hasReproData = Object.values(formData.reproRates).some(
-      rate => rate.occurred || rate.total
-    );
-
-    if (!hasReproData) {
-      newErrors.reproRates = 'Please enter reproduction rate for at least one platform';
-    }
-
-    if (!formData.experiencesImpacted || formData.experiencesImpacted.length === 0) {
-      newErrors.experiencesImpacted = 'Please select at least one experience impacted';
-    }
-
-    if (!formData.howFound) {
-      newErrors.howFound = 'Please select how the bug was found';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const fillTestData = () => {
-    setFormData({
-      project: 'FORT',
-      howFound: 'Playtesting',
-      experiencesImpacted: ['Battle Royale'],
-      branchFoundIn: '39.10',
-      foundCL: '38925561',
-      commandLine: '',
-      testTeam: 'EPAM',
-      affectsVersions: '',
-      deviceSpecs: 'PS5',
-      customDeviceSpecs: '',
-
-      reproRates: {
-        'PS4': { occurred: '', total: '' },
-        'PS5': { occurred: '3', total: '5' },
-        'XB1': { occurred: '', total: '' },
-        'XSX': { occurred: '2', total: '5' },
-        'Switch': { occurred: '', total: '' },
-        'PC': { occurred: '', total: '3' },
-        'Android': { occurred: '', total: '' },
-        'iOS': { occurred: '', total: '' },
-        'iPAD': { occurred: '', total: '' },
-        'Switch 2': { occurred: '', total: '' }
-      },
-
-      bugDescription: 'Game crashes to desktop when opening inventory while riding a vehicle at high speed',
-      whatWasDoing: 'Playing Battle Royale, riding a car and trying to swap weapons in inventory',
-      whereHappened: 'Near Mega City POI, on the main road while driving',
-      workaround: 'Exit the vehicle before opening inventory',
-      callstack: ''
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (validateForm()) {
-      // Calculate platforms where bug occurs (where occurred > 0)
-      const platformsWithBug = Object.entries(formData.reproRates)
-        .filter(([_, rate]) => parseInt(rate.occurred) > 0)
-        .map(([platform]) => platform);
-
-      // Calculate platforms tested (where total > 0)
-      const platformsTested = Object.entries(formData.reproRates)
-        .filter(([_, rate]) => parseInt(rate.total) > 0)
-        .map(([platform]) => platform);
-
-      // Calculate total repro count
-      const totalOccurred = Object.values(formData.reproRates)
-        .reduce((sum, rate) => sum + (parseInt(rate.occurred) || 0), 0);
-      const totalAttempts = Object.values(formData.reproRates)
-        .reduce((sum, rate) => sum + (parseInt(rate.total) || 0), 0);
-
-      // Merge device specs if custom is selected
-      const finalFormData = {
-        ...formData,
-        platforms: platformsWithBug,
-        platformsTested: platformsTested,
-        reproductionCount: `${totalOccurred}/${totalAttempts}`,
-        deviceSpecs: formData.deviceSpecs === 'Custom'
-          ? formData.customDeviceSpecs
-          : DEVICE_SPECS_PRESETS[formData.deviceSpecs] || formData.deviceSpecs
-      };
-
-      onSubmit(finalFormData);
-    }
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="max-w-5xl mx-auto retro-card p-8">
+    <div className="retro-card p-8">
       <div className="mb-8">
         <h1 className="text-4xl font-bold" style={{color: 'var(--retro-border)'}}>
           BUG REPORT FORMATTER
@@ -350,21 +277,7 @@ const BugReportForm = ({ onSubmit, isLoading }) => {
         />
       </div>
 
-      {/* Submit Button */}
-      <div className="flex justify-end mt-8">
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="px-8 py-4 text-lg font-bold uppercase"
-          style={{
-            backgroundColor: isLoading ? 'var(--retro-accent)' : 'var(--retro-primary)',
-            color: 'var(--retro-header-text)'
-          }}
-        >
-          {isLoading ? 'GENERATING...' : 'GENERATE BUG REPORT WITH AI'}
-        </button>
-      </div>
-    </form>
+    </div>
   );
 };
 
