@@ -133,29 +133,39 @@ ${formData.callstack ? '\n\nCallstack:\n' + formData.callstack : ''}
   };
 
   const buildJiraComment = () => {
-    const gameMode = formData.labels?.gameMode || 'Game';
-    return `New instance of ${data.summary.toLowerCase()} in ${gameMode} during [Event/Playtest]
+    const gameMode = formData.labels?.gameMode || '';
+    const isCrash = data.summary.toLowerCase().includes('crash') || data.component.toLowerCase().includes('crash');
+
+    // Build intro line
+    const introLine = isCrash
+      ? `New instance of crash in ${gameMode} during [Event/Playtest]`
+      : `Issue reproduced${gameMode ? ` in ${gameMode}` : ''} during [Event/Playtest]`;
+
+    // Extract actual and expected results from description
+    const descLines = data.description.split('\n').filter(line => line.trim());
+    const actualResult = descLines[0] || 'Issue occurred';
+
+    return `${introLine}
 
 PLATFORMS
 
-${formData.platforms?.join('\n') || 'N/A'}
-${formData.deviceSpecs ? formData.deviceSpecs : ''}
+${formData.platforms?.join(', ') || 'N/A'}
+${formData.deviceSpecs ? '\n' + formData.deviceSpecs : ''}
 
-Version: ${formData.branchFoundIn || 'N/A'} > CL: ${formData.foundCL || 'N/A'} > ID: [Build ID] -> Backend: [Backend Name]
+Version: ${formData.branchFoundIn || '[Version]'} > CL: ${formData.foundCL || '[CL]'} > ID: [Build ID] -> Backend: [Backend Name]
 
-Command line: ${formData.commandLine || 'N/A'}
-
+${formData.commandLine ? `Command line: ${formData.commandLine}\n` : ''}
 REPRO STEPS
 
 ${data.steps}
 
 ACTUAL RESULT
 
-${data.description.split('\n')[0] || 'Issue occurred'}
+${actualResult}
 
 EXPECTED RESULT
 
-[Expected behavior description]
+[Expected behavior - the issue should not occur]
 
 REPRO RATE: ${formData.reproductionCount}
     `.trim();

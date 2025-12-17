@@ -53,12 +53,12 @@ export const EXPERIENCES_IMPACTED = [
   'UEFN'
 ];
 
-export const TEST_TEAMS = [
-  'EPAM',
-  'Lionbridge',
-  'Epic Internal',
-  'Community'
-];
+export const PROJECTS = ['FORT', 'PLAY'];
+
+export const TEST_TEAMS = {
+  'FORT': 'EPAM',
+  'PLAY': 'EPAM-LFN'
+};
 
 export const LABEL_CATEGORIES = {
   // Primary labels (required - first label)

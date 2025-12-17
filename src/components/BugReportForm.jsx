@@ -8,6 +8,7 @@ import {
   PLATFORMS,
   HOW_FOUND_OPTIONS,
   EXPERIENCES_IMPACTED,
+  PROJECTS,
   TEST_TEAMS,
   DEVICE_SPECS_PRESETS,
   LABEL_CATEGORIES
@@ -24,7 +25,7 @@ const BugReportForm = ({ onChange }) => {
     branchFoundIn: '',
     foundCL: '',
     commandLine: '',
-    testTeam: '',
+    testTeam: 'EPAM', // Auto-set based on project
     affectsVersions: '',
     deviceSpecs: '',
     customDeviceSpecs: '',
@@ -96,6 +97,12 @@ const BugReportForm = ({ onChange }) => {
       ...formData,
       [name]: value
     };
+
+    // Auto-update test team based on project
+    if (name === 'project') {
+      newFormData.testTeam = TEST_TEAMS[value];
+    }
+
     setFormData(newFormData);
     updateParent(newFormData);
 
@@ -121,12 +128,12 @@ const BugReportForm = ({ onChange }) => {
         <h2 className="retro-section-header text-xl uppercase">BASIC INFORMATION</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <TextInput
+          <Select
             label="Project"
             name="project"
             value={formData.project}
             onChange={handleChange}
-            placeholder="FORT"
+            options={PROJECTS}
             required
           />
 
@@ -140,12 +147,13 @@ const BugReportForm = ({ onChange }) => {
             error={errors.howFound}
           />
 
-          <Select
+          <TextInput
             label="Test Team"
             name="testTeam"
             value={formData.testTeam}
             onChange={handleChange}
-            options={TEST_TEAMS}
+            disabled
+            helpText="Auto-selected based on Project"
           />
 
           <TextInput
