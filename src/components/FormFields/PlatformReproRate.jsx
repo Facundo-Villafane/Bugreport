@@ -115,15 +115,15 @@ const PlatformReproRate = ({ platforms, reproRates, onChange, error }) => {
       </p>
 
       {/* Mode Tabs */}
-      <div className="flex gap-2 mb-3">
+      <div className="flex flex-wrap gap-2 mb-3">
         {['BR', 'JUNO', 'SPARKS'].map((mode) => (
           <button
             key={mode}
             type="button"
             onClick={() => handleTabChange(mode)}
-            className="px-4 py-2 text-sm font-bold uppercase"
+            className="px-4 py-2 text-sm font-bold uppercase flex-1 min-w-[80px]"
             style={{
-              backgroundColor: activeTab === mode ? 'var(--retro-primary)' : 'var(--retro-secondary)',
+              backgroundColor: activeTab === mode ? 'var(--retro-primary)' : 'var(--retro-card-bg)',
               color: activeTab === mode ? 'var(--retro-header-text)' : 'var(--retro-text)',
               border: '3px solid var(--retro-border)',
               boxShadow: activeTab === mode ? 'var(--retro-shadow)' : 'none'
@@ -187,14 +187,14 @@ const PlatformReproRate = ({ platforms, reproRates, onChange, error }) => {
       </div>
 
       <div className="p-4" style={{border: '3px solid var(--retro-border)', backgroundColor: 'var(--retro-accent)'}}>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {allPlatforms.map((platform) => {
             const occurred = reproRates[platform]?.occurred || '';
             const total = reproRates[platform]?.total || '';
 
             return (
               <div key={platform} className="flex items-center gap-2">
-                <label className="text-sm font-bold w-20" style={{color: 'var(--retro-border)'}}>
+                <label className="text-sm font-bold min-w-[70px]" style={{color: 'var(--retro-border)'}}>
                   {platform}:
                 </label>
                 <input

@@ -52,7 +52,7 @@ const LabelSelector = ({ value, onChange, labelCategories }) => {
                 onClick={() => handleLabelChange('primary', label)}
                 className="px-4 py-2 text-sm font-bold uppercase flex-1"
                 style={{
-                  backgroundColor: value.primary === label ? 'var(--retro-primary)' : 'var(--retro-secondary)',
+                  backgroundColor: value.primary === label ? 'var(--retro-primary)' : 'var(--retro-card-bg)',
                   color: value.primary === label ? 'var(--retro-header-text)' : 'var(--retro-text)',
                   border: '2px solid var(--retro-border)',
                   boxShadow: value.primary === label ? 'var(--retro-shadow)' : 'none'
@@ -89,7 +89,7 @@ const LabelSelector = ({ value, onChange, labelCategories }) => {
                 onClick={() => handleLabelChange('secondary', label)}
                 className="px-4 py-2 text-sm font-bold uppercase flex-1"
                 style={{
-                  backgroundColor: value.secondary === label ? 'var(--retro-primary)' : 'var(--retro-secondary)',
+                  backgroundColor: value.secondary === label ? 'var(--retro-primary)' : 'var(--retro-card-bg)',
                   color: value.secondary === label ? 'var(--retro-header-text)' : 'var(--retro-text)',
                   border: '2px solid var(--retro-border)',
                   boxShadow: value.secondary === label ? 'var(--retro-shadow)' : 'none'
@@ -126,7 +126,7 @@ const LabelSelector = ({ value, onChange, labelCategories }) => {
                 onClick={() => handleLabelChange('gameMode', label)}
                 className="px-3 py-2 text-xs font-bold uppercase"
                 style={{
-                  backgroundColor: value.gameMode === label ? 'var(--retro-primary)' : 'var(--retro-secondary)',
+                  backgroundColor: value.gameMode === label ? 'var(--retro-primary)' : 'var(--retro-card-bg)',
                   color: value.gameMode === label ? 'var(--retro-header-text)' : 'var(--retro-text)',
                   border: '2px solid var(--retro-border)',
                   boxShadow: value.gameMode === label ? 'var(--retro-shadow)' : 'none'
@@ -166,7 +166,7 @@ const LabelSelector = ({ value, onChange, labelCategories }) => {
                 className="inline-flex items-center px-3 py-1 text-xs font-bold uppercase"
                 style={{
                   backgroundColor: 'var(--retro-secondary)',
-                  color: 'var(--retro-border)',
+                  color: 'var(--retro-header-text)',
                   border: '2px solid var(--retro-border)'
                 }}
               >

@@ -132,6 +132,38 @@ ${formData.callstack ? '\n\nCallstack:\n' + formData.callstack : ''}
     toast.success('Jira fields copied!');
   };
 
+  const copyJiraComment = () => {
+    const gameMode = formData.labels?.gameMode || 'Game';
+    const comment = `New instance of ${data.summary.toLowerCase()} in ${gameMode} during [Event/Playtest]
+
+PLATFORMS
+
+${formData.platforms?.join('\n') || 'N/A'}
+${formData.deviceSpecs ? formData.deviceSpecs : ''}
+
+Version: ${formData.branchFoundIn || 'N/A'} > CL: ${formData.foundCL || 'N/A'} > ID: [Build ID] -> Backend: [Backend Name]
+
+Command line: ${formData.commandLine || 'N/A'}
+
+REPRO STEPS
+
+${data.steps}
+
+ACTUAL RESULT
+
+${data.description.split('\n')[0] || 'Issue occurred'}
+
+EXPECTED RESULT
+
+[Expected behavior description]
+
+REPRO RATE: ${formData.reproductionCount}
+    `.trim();
+
+    navigator.clipboard.writeText(comment);
+    toast.success('Jira comment copied!');
+  };
+
   return (
     <div className="max-w-6xl mx-auto retro-card p-8">
       <Toaster position="top-right" />
@@ -150,20 +182,27 @@ ${formData.callstack ? '\n\nCallstack:\n' + formData.callstack : ''}
       </div>
 
       {/* Quick Actions */}
-      <div className="flex gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <button
           onClick={copyAllJiraFormat}
-          className="flex-1 px-6 py-4 font-bold uppercase text-lg"
+          className="px-6 py-4 font-bold uppercase text-lg"
           style={{backgroundColor: 'var(--retro-secondary)', color: 'var(--retro-header-text)'}}
         >
-          COPY COMPLETE REPORT
+          📋 COPY COMPLETE REPORT
         </button>
         <button
           onClick={copyJiraFieldsOnly}
-          className="flex-1 px-6 py-4 font-bold uppercase text-lg"
+          className="px-6 py-4 font-bold uppercase text-lg"
           style={{backgroundColor: 'var(--retro-primary)', color: 'var(--retro-header-text)'}}
         >
-          COPY JIRA FIELDS ONLY
+          📝 COPY JIRA FIELDS
+        </button>
+        <button
+          onClick={copyJiraComment}
+          className="px-6 py-4 font-bold uppercase text-lg"
+          style={{backgroundColor: 'var(--retro-accent)', color: 'var(--retro-text)', border: '3px solid var(--retro-border)'}}
+        >
+          💬 COPY JIRA COMMENT
         </button>
       </div>
 
