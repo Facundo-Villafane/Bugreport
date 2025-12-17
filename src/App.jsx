@@ -69,8 +69,8 @@ function App() {
             />
           </div>
 
-          {/* Right Column - Live Preview (Sticky) */}
-          <div className="lg:sticky lg:top-8 lg:self-start" style={{maxHeight: 'calc(100vh - 4rem)', overflowY: 'auto'}}>
+          {/* Right Column - Live Preview (Sticky only when empty/generating) */}
+          <div className={Object.keys(generatedFields).length === 0 || isGenerating ? "lg:sticky lg:top-8 lg:self-start" : ""}>
             {error && (
               <div className="mb-4 p-4 retro-card" style={{backgroundColor: '#ffebee'}}>
                 <div className="flex items-center">
