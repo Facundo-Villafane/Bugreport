@@ -175,18 +175,10 @@ const BugReportForm = ({ onSubmit, isLoading }) => {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-5xl mx-auto retro-card p-8">
-      <div className="flex justify-between items-center mb-8">
+      <div className="mb-8">
         <h1 className="text-4xl font-bold" style={{color: 'var(--retro-border)'}}>
           BUG REPORT FORMATTER
         </h1>
-        <button
-          type="button"
-          onClick={fillTestData}
-          className="px-4 py-2 text-sm font-bold uppercase"
-          style={{backgroundColor: 'var(--retro-secondary)', color: 'var(--retro-header-text)'}}
-        >
-          FILL TEST DATA
-        </button>
       </div>
 
       {/* Section 1: Basic Information */}
