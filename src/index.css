@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+:root {
+  --retro-bg: #f5f5f5;
+  --retro-border: #4a4a4a;
+  --retro-primary: #1a1a1a;
+  --retro-secondary: #2c2c2c;
+  --retro-accent: #e8e8e8;
+  --retro-text: #000000;
+  --retro-shadow: 3px 3px 0px rgba(74, 74, 74, 0.3);
+  --retro-card-bg: #ffffff;
+  --retro-header-text: #ffffff;
+}
+
+[data-theme="dark"] {
+  --retro-bg: #1a1a1a;
+  --retro-border: #6b6b6b;
+  --retro-primary: #f5f5f5;
+  --retro-secondary: #e0e0e0;
+  --retro-accent: #2c2c2c;
+  --retro-text: #ffffff;
+  --retro-shadow: 3px 3px 0px rgba(107, 107, 107, 0.3);
+  --retro-card-bg: #2c2c2c;
+  --retro-header-text: #000000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: var(--retro-bg);
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(0, 24, 88, 0.03) 10px,
+      rgba(0, 24, 88, 0.03) 20px
+    );
+  font-family: 'Courier New', Courier, monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--retro-text);
+}
+
+#root {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+/* Retro Button Styles */
+button {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  border: 3px solid var(--retro-border);
+  box-shadow: var(--retro-shadow);
+  transition: all 0.1s ease;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px rgba(0, 24, 88, 1);
+}
+
+button:active:not(:disabled) {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Retro Input Styles */
+input, textarea, select {
+  font-family: 'Courier New', Courier, monospace;
+  border: 3px solid var(--retro-border);
+  background-color: white;
+  box-shadow: inset 2px 2px 0px rgba(0, 24, 88, 0.1);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--retro-primary);
+  box-shadow: inset 2px 2px 0px rgba(245, 130, 174, 0.2);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--retro-accent);
+  border: 2px solid var(--retro-border);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--retro-primary);
+  border: 2px solid var(--retro-border);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--retro-secondary);
+}
+
+/* Retro Card Styles */
+.retro-card {
+  background-color: var(--retro-card-bg);
+  border: 4px solid var(--retro-border);
+  box-shadow: var(--retro-shadow);
+}
+
+/* Retro Section Headers */
+.retro-section-header {
+  background-color: var(--retro-primary);
+  border: 3px solid var(--retro-border);
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  box-shadow: var(--retro-shadow);
+  color: var(--retro-header-text);
+}
